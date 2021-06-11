@@ -1,4 +1,3 @@
 # SPA_STOCSY
 
-http://htmlpreview.github.io/?https://github.com/wanliw96/SPA_STOCSY/blob/master/spa_stocsy_menu.html
-
+https://wanliw96.github.io/SPA_STOCSY/spa_stocsy_menu.html
