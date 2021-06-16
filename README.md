@@ -15,9 +15,9 @@ All the data listed in the paper are stored in input_data/ foler.
 
 ## Input format
 
-The input file takes multiple NMR samples as columns. With the first column specified as a list of chemical shift values.
+- The input file takes multiple NMR samples as columns. With the first column specified as a list of chemical shift values.
+- The NMR samples are highly recommended to get normalized on integral.
 
-'ppm  sample1 sample2'
 
 
 
