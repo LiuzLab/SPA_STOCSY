@@ -19,6 +19,14 @@ All the data listed in the paper are stored in input_data/ foler.
 - The NMR samples are highly recommended to get normalized on integral.
 
 
+## Output
+
+- The output location is defined by user before running the tool as in the example
+- The output files contain:
+    - Multiple visualization plots during the running process
+    - 'SPA_cluster_peaks.csv': peaks detected in each SPA cluster
+    - 'STOCSY_corr_clusters.csv': correlated SPA clusters generated from STOCSY
+    - 'auto_identify_metabolites.csv': list of identified metabolites with a set detection rate
 
 
 
