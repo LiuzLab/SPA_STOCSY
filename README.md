@@ -15,6 +15,9 @@ All the data listed in the paper are stored in input_data/ foler.
 
 ## Input format
 
+The input file takes multiple NMR samples as columns. With the first column specified as a list of chemical shift values.
+
+'ppm  sample1 sample2'
 
 
 
