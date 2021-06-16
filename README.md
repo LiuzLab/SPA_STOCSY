@@ -13,7 +13,12 @@ All the data listed in the paper are stored in input_data/ foler.
 - human_cell_data.csv: 22 NMR samples from human cells  
 - chx_lib_trunc.csv: Chenomx library fror 257 metabolites with their cluster information  
 
-## Input format
+## Source code
+
+The main functions in SPA_STOCSY are stored in source_codes/ folder.  
+Load these R files before running the tool as in the example.
+
+## Input
 
 - The input file takes multiple NMR samples as columns. With the first column specified as a list of chemical shift values.
 - The NMR samples are highly recommended to get normalized on integral.
