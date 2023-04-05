@@ -402,9 +402,9 @@ write.csv(spa_stocsy_corr, paste(output_dir,"STOCSY_corr_clusters.csv",sep = "")
 ```
 
 
-###Prepare Chenomx library
+###Prepare reference library
 ```{r}
-##load Chenomx library data
+##load reference library data
 setwd(data_dir)
 filename = "chx_lib_trunc.csv"
 
