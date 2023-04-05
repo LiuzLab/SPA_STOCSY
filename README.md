@@ -12,7 +12,7 @@ All the data listed in the paper are stored in input_data/ foler.
 - 10_meta_simulation.csv : 50 synthesized samples from 10 metabolites
 - htt_c12.csv: 10 NMR samples from brain homogenates of Drosophila melanogaster
 - human_cell_data.csv: 22 NMR samples from human cells  
-- chx_lib_trunc.csv: Chenomx library for 257 metabolites with their cluster information  
+- chx_lib_trunc.csv: Reference library for 257 metabolites with their cluster information  
 
 
 ## Source code
