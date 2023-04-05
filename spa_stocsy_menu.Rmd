@@ -18,16 +18,16 @@ library(ggplot2)
 library(baseline)
 library(msProcess)
 library(splus2R)
+root_dir = "/mnt/hdd/wanliw/SPA-STOCSY/submit_github/"
 
 ```
 
 
 ## Setup codes
 ```{r}
-##specify paths to load the source codes, input data and save the output files
-code_dir <- "~/Desktop/SPA-STOCSY/submit_github/source_codes/"
-data_dir <- "~/Desktop/SPA-STOCSY/submit_github/input_data/"
-output_dir <- "~/Desktop/SPA-STOCSY/submit_github/output/"
+code_dir <- paste0(root_dir,"source_codes/")
+data_dir <- paste0(root_dir,"input_data/")
+output_dir <- paste0(root_dir,"output/")
 
 setwd(code_dir)
 
@@ -50,7 +50,7 @@ setwd(code_dir)
   source("gen_summary_profile.r")
   source("Gen.ct.r")
   source("gen.J.couple.r")
-  source("Gen.spa.group.R")
+  source("Gen.spa.group.r")
  
   source("Ints_avg_mod.r")
   source("Landscape_cut.r")
@@ -75,8 +75,8 @@ setwd(code_dir)
 ```
 
 
-##Load input data
-###Set file path
+## Load input data
+### Set file path
 ```{r}
 
 setwd(data_dir)
@@ -84,7 +84,7 @@ filename = "htt_c12.csv"
 htt.dat <- read.csv(filename, header = T)
 ```
 
-###Extract ppm and adjust data format
+### Extract ppm and adjust data format
 ```{r}
 ppm0 <- htt.dat[,1]
 dat0 <- t(htt.dat[, -1])
@@ -101,8 +101,8 @@ print("Raw data loaded.")
 ```
 
 
-##Raw data preprocessing steps:
-###Samples alignment:
+## Raw data preprocessing steps:
+### Samples alignment:
 ```{r}
 region = c(-.05, .05)
 ppm = ppm0
@@ -143,7 +143,7 @@ lines(appm[region],ahtt[region,1],col="dark green")
 ```
 
 
-###Baseline correction
+### Baseline correction
 ```{r,warning=FALSE}
 dat <- t(dat0)
 ppm <- ppm0
@@ -164,7 +164,7 @@ legend(2.8,0.0043,legend=c("Original","Base_corrected"),
 
 ```
 
-###Keep informative spectra in 0.5-4.0ppm
+### Keep informative spectra in 0.5-4.0ppm
 ```{r,results="hold"}
 dat.bl1 <- dat.bl
 dat.bl1 <- dat.bl1[, which(ppm < 4 & ppm >0.5)]
@@ -176,7 +176,7 @@ length(ppm1)
 ```
 
 
-###Noise estimation
+### Noise estimation
 ```{r}
 nos.est <- Noise.est(dat.bl, pos.standar = c(0.08, 0.58), ppm)
 nos <- nos.est * 5
@@ -192,7 +192,7 @@ qplot(ppm[which(ppm>0.5)], avg.bl[which(ppm>0.5)], geom = "line") +
   scale_x_reverse()
 ```
 
-###Quotient normalization
+### Quotient normalization
 ```{r}
 qut_dat.bl1 <- PQ_norm_signal(t(dat.bl), method = "median", ppm, c(0.08, 0.58))
 quot.bl1 <- qut_dat.bl1$quot
@@ -214,7 +214,7 @@ dat_pqnorm.bl2[which(dat_pqnorm.bl2 < nos)] <- 0
 ```
 
 
-##SPA process:
+## SPA process:
 ### PACF
 ```{r,results="hold"}
 dat = dat_pqnorm.bl1
@@ -233,7 +233,7 @@ print("Here k is set to 7.")
 k=7
 ```
 
-###Parameters for SPA
+### Parameters for SPA
 ```{r}
 span = 3
 a1 = 0.8
@@ -250,7 +250,8 @@ path=output_dir
 
 ```
 
-###Run SPA
+
+### Run SPA
 ```{r,warning=FALSE}
 ptm <- proc.time()
 grp.res <- Gen.spa.clus(dat, ppm, k, span, a1, a2, n.gam, n.tr, n.cv, b2, kern.type,path)
@@ -312,8 +313,8 @@ element_text(size = base_size , angle = 0, hjust =0, colour =
 
 ```
 
-##STOCSY process:
-###Prepare input for STOCSY
+## STOCSY process:
+### Prepare input for STOCSY
 ```{r,results="hold"}
 dat.spa <- ints  # intensities are calcualted by averaging the hump intensities with in that cluster.
 cor.dat.spa <- cor(ints)
@@ -328,7 +329,7 @@ range(cor.dat.spa)
 myImagePlot2(cor.dat.spa)
 ```
 
-###Heatmap for correlated clusters
+### Heatmap for correlated clusters
 ```{r}
 #set threshold for correlation among clusters
 #Here set threshold as 0.8
@@ -340,7 +341,7 @@ myImagePlot2(a.8)
 
 ```
 
-###Summarize and visulize correlated clusters
+### Summarize and visulize correlated clusters
 ```{r}
 ##Have highly correlated clusters in list
 a8 <- gen.J.couple(cor.dat.spa, .8)
@@ -350,12 +351,12 @@ clus(id=c(5,9,11,17))
 
 ```
 
-###Peak detection
+### Peak detection
 ```{r,echo=FALSE}
 print("Select one of CWT or simple peak detection methods to proceed.")
 ```
 
-####CWT peak detection
+#### CWT peak detection
 ```{r}
 ##change the parameters based on different data
 pks <- Peak_cwt(dat, ppm, thresh.scale = 1, scale.min = .5, 
@@ -365,21 +366,21 @@ pks <- Peak_cwt(dat, ppm, thresh.scale = 1, scale.min = .5,
 
 ```
 
-####Simple peak detection
+#### Simple peak detection
 ```{r}
 peaks=splus2R::peaks #specify that the peaks function is from splus2R package
 pks <- Peak_simple(dat, ppm, thresh.scale = 10, snr = 3, snr.thresh=10)
 
 ```
 
-####Extract detected peaks
+#### Extract detected peaks
 ```{r}
 idx.pk <- pks$idx.pk
 pk.ppm <- ppm[idx.pk]
 ```
 
 
-###Summarize clusters and peaks
+### Summarize clusters and peaks
 ```{r,warning=FALSE}
 
 cluster_peak=combine_cluster_peak(clus.mem,ppm,pk.ppm)
@@ -388,8 +389,8 @@ a8_summary=gen_summary_profile(cor_clus=a8,cluster_peak)
 ```
 
 
-##Automatic metabolites identification
-###Prepare inputs from SPA-STOCSY results
+## Automatic metabolites identification
+### Prepare inputs from SPA-STOCSY results
 ```{r}
 ##summarize peak lists in every SPA cluster
 clus_mem=gen_SPA_peaks(profile=a8_summary,cluster_peak)
@@ -402,7 +403,7 @@ write.csv(spa_stocsy_corr, paste(output_dir,"STOCSY_corr_clusters.csv",sep = "")
 ```
 
 
-###Prepare reference library
+### Prepare reference library
 ```{r}
 ##load reference library data
 setwd(data_dir)
@@ -448,7 +449,7 @@ head(spa_stocsy_corr)
 ```
 
 
-###Automatic identification on one group
+### Automatic identification on one group
 ```{r}
 #take the third highly-correlated group for example
 
@@ -464,7 +465,7 @@ meta_ct[which(meta_ct$dect_rate > d.thre), ]
 ```
 
 
-###Automatic identification across all groups
+### Automatic identification across all groups
 ```{r}
 #set detection rate threshold
 d.thre = 0.55
